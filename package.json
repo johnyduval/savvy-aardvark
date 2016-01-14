@@ -38,6 +38,7 @@
     "gulp-sass": "^2.1.1",
     "parse": "^1.6.14",
     "react": "^0.14.6",
+    "react-pagify": "^0.10.1",
     "superagent": "^1.6.1",
     "underscore": "^1.8.3"
   }
