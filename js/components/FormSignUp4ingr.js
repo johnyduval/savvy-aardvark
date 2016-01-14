@@ -5,13 +5,19 @@ import Formsy from 'formsy-react';
 import Parse from 'parse';
 Parse.initialize("xMN2SDWbUpH0Tius0RAscb5Ia65CGOD7U1qKtAxH", "wlqxDznzkziAQB2hNhMFu5VKXvwKskjDonIhlSNn");
 
-import FormInput from './FormInput';
+import FormSignUp4ingrAdd from './FormSignUp4ingrAdd';
+import dietSpecs from './DietSpecifications';
 
 var FormSignUp4ingr = React.createClass({
     getInitialState: function () {
+        var diet = Parse.User.current().get('diet')
         return {
             canSubmit: false,
-            statusMessage: false
+            statusMessage: false,
+            diet: diet,
+            ingredients: Parse.User.current().get('to_avoid'),
+            dietSpecifics: dietSpecs[diet](),
+            customIngredients: Parse.User.current().get('custom_avoid') || []
         }
     },
     enableButton: function () {
@@ -26,60 +32,70 @@ var FormSignUp4ingr = React.createClass({
             statusMessage: false
         });
     },
-    onChangeDiet: function (values) {
-        console.log(values.diet);
-        this.setState({
-            chosenDiet: values.diet
-        })
-    },
-
-    submit: function (model) {
+    //onChangeDiet: function (values) {
+    //    this.setState({
+    //        chosenDiet: values.diet
+    //    })
+    //},
+    addIngredient: function (model) {
         event.preventDefault();
         var that = this;
         var user = Parse.User.current();
 
-        var ingredient = model.ingredient;
-        console.log(ingredient);
-
-        user.addUnique('to_avoid', ingredient);
+        user.addUnique('custom_avoid', model.ingredient);
         user.save({
             success: function (result) {
+                that.setState({customIngredients: Parse.User.current().get('custom_avoid')})
+
             },
             error: function (error) {
                 console.log(error.message);
             }
-        }).then(function () {
-            that.props.history.pushState(null, '/search');
         });
     },
+    submit: function () {
+        event.preventDefault();
+        this.props.history.pushState(null, '/');
+    },
     render () {
+
         return (
             <div className="main">
                 <h1>Ingredients</h1>
-                <h6>Step 4 of 4</h6>
-                <Formsy.Form
-                    onChange={this.onChangeDiet}
-                    className="main__panel"
-                    onValidSubmit={this.submit}
-                    onValid={this.enableButton}
-                    onInvalid={this.disableButton}>
+                <div className="main__panel">
 
-                    <div className="field">
-                        <label>Ingredients to Avoid</label>
-                        <FormInput
-                            placeholder="single ingredient"
-                            name="ingredient"
-                            title="ingredient"
-                        />
+                    <p className="step">Step 4 of 4</p>
+                    <h3>{this.state.diet.toUpperCase()}</h3>
+                    <br />
+                    <h4>Stuff you can't eat</h4>
+                    <div className="watchItems">
+                        <ul>
+                            {this.state.dietSpecifics.map(function (item) {
+                                return <div>
+                                    <li>{item}</li>
+                                </div>
+                            })}
+                        </ul>
                     </div>
+                    <h4>Additional Ingredients</h4>
+                    <div className="watchItems">
+                        <ul>
+                            {this.state.customIngredients.map(function (item) {
+                                return <div>
+                                    <li>{item}</li>
+                                </div>
+                            })}
+                        </ul>
+                    </div>
+                    <FormSignUp4ingrAdd addIngredient={this.addIngredient}/>
 
                     <button
                         className="submit-btn"
-                        type="submit"
-                        disabled={!this.state.canSubmit}>
+                        onClick={this.submit}
+                        type="submit">
                         Next
                     </button>
-                </Formsy.Form>
+                </div>
             </div>
         );
     }

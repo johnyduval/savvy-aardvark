@@ -1,6 +1,6 @@
 // Colors
 $main-color: #59abdf;
-$secondary-color: rgba(0, 0, 0, .4);
+$secondary-color: rgba(255, 255, 255, .75);
 $bg-color: #59abdf;
 $go-color: green;
 $warning-color: yellow;
@@ -36,7 +36,7 @@ nav ul li { font-size: 1.33em; }
 // Button State Styling
 button:disabled {
   cursor: default;
-  opacity: .4;
+  opacity: .7;
 }
 // Rows and Columns
 .row {

@@ -5,7 +5,7 @@
 
 // Small Screens - Mobile First!!!!!!
 html {
-  background: url('/images/bgImages/bg5.jpg') no-repeat center center fixed;
+  background: url('/images/bgImages/bg1.jpg') no-repeat center center fixed;
   background-size: cover;
   height: 100%;
 }
@@ -49,12 +49,13 @@ body {
 }
 
 nav {
-  background: $secondary-color;
+  background: rgba(47,79,79, 0.9) ;
   display: block;
   height: 48px;
+  padding: 0 .5em;
 
   p {
-    color: $go-color;
+    color: $main-color;
     display: inline-block;
     float: left;
     font-family: $form-font;
@@ -79,7 +80,7 @@ nav {
 
       }
       a {
-        color: white;
+        color: $main-color;
 
         &:hover {
           color: $go-color;
@@ -122,6 +123,67 @@ nav {
   }
 }
 
+.watchItems {
+  background: $main-color;
+  display: block;
+  overflow: auto;
+  margin: 5px 0 1em 0;
+  min-height: 40px;
+  padding: .25em;
+  text-align: center;
+
+  li {
+    color: white;
+    font-family: $body-font;
+    font-weight: lighter;
+    padding: 5px;
+  }
+}
+
+.ingredientList {
+  display: block;
+  padding: 0 0 1em 0;
+  .item {
+    margin: 0;
+    padding: 5px 7px;
+    text-align: center;
+    border-right: 1px solid black;
+  }
+  li {
+    color: black;
+  }
+}
+
+// User History table
+.history {
+  width: 100%;
+  th {
+    border-bottom: 1px solid #000;
+    font-family: $body-font;
+    font-weight: bold;
+    padding: .5em 0;
+    text-align: center;
+  }
+  td {
+    padding: .5em 0;
+  }
+  td:nth-child(1) {
+    overflow: hidden;
+  }
+  td:nth-child(2) {
+    padding: .5em .25em;
+    text-align: center;
+  }
+  td:nth-child(3) {
+    text-align: center;
+  }
+  tr {
+    border-bottom: 1px solid #000;
+    a {
+      cursor: pointer;
+    }
+  }
+}
 .signin {
   &__btn {
     background: $main-color;
@@ -139,6 +201,7 @@ nav {
 
 // FORM Styling
 .field {
+  clear: left;
   color: grey;
   display: block;
   font-family: $form-font;
@@ -150,11 +213,11 @@ nav {
     margin-left: 1px;
   }
   input {
-    color: silver;
+    color: grey;
     font-size: 1.2em;
     height: 3em;
     margin: .1em 0;
-    padding: 0 .35em;
+    padding: 0 55px 0 .35em;
     width: 100%;
   }
 }
@@ -168,7 +231,7 @@ nav {
   border: none;
   font-family: $header-font;
   font-size: 1.2em;
-  margin: .5em 0 1em;
+  margin: .5em 0 0;
   padding: .5em;
   width: 100px;
 }
@@ -177,12 +240,14 @@ nav {
   position: relative;
 
   .searchBar {
+    width: 100%;
+
     label {
-      color: white;
       font-weight: bold;
       margin-bottom: 5px;
     }
   }
+
   .searchSubmit {
     border: none;
     border-radius: 50%;
@@ -190,21 +255,17 @@ nav {
     height: 40px;
     margin-left: -1px;
     position: absolute;
-    right: 25px;
+    right: 27px;
     text-align: center;
-    padding: 0 0 7px 0;
-    top: 41px;
+    padding: 0 0 2px 1px;
+    top: 32px;
     width: 40px;
   }
-}
-
-.searchBar {
-  display: inline-block;
-  width: 100%;
-}
-
-.diets li {
-
+  .addIngr {
+    font-size: 18px;
+    top: 16px;
+    right: 8px;
+  }
 }
 
 .main {
@@ -213,35 +274,88 @@ nav {
   max-width: 600px;
 
   h1 {
+    color: $main-color;
+    text-shadow: 1px 1px $secondary-color;
     text-align: center;
-    margin-bottom: 1em;
+    margin-bottom: .15em;
   }
 
   &__panel {
     background: $secondary-color;
+    border: 1px solid $main-color;
+    border-radius: 25px;
     margin: 0 1em 1em;
-    padding: 1.5em 1em 2em;
+    padding: 1em 1em;
     width: 92%;
 
+    .step {
+      color: $go-color;
+      padding: 0;
+      margin: 0 0 .5em 0;
+      text-align: right;
+    }
+
+    h2 {
+      text-align: center;
+    }
     p {
-      color: grey;
+      color: black;
       font-family: $form-font;
       margin: 1em 0;
     }
   }
 
-  #registered {
-    display: block;
-    float: right;
-    font-family: $form-font;
-    font-size: .8em;
-    //margin-bottom: 1em;
+  .results {
+    li {
+      background: $main-color;
+      display: block;
+      margin: .4em .3em 0;
+      padding: .5em .8em;
+
+      &:hover {
+        background-color: $go-color;
+        transition: all .5s ease;
+      }
+    }
 
     a {
-      color: $main-color;
-      font-weight: bold;
-      text-transform: uppercase;
+      color: white;
+      font-family: $body-font;
+      font-size: 1.2em;
+      font-weight: lighter;
+
     }
+  }
+}
+
+.productResult {
+  padding: 1em 1.5em;
+  h2 {
+    border-bottom: 1px solid black;
+    font-family: $body-font;
+    font-size: 1.3em;
+    margin: 0 0 10px;
+    padding: 0 0 10px;
+  }
+  h3 {
+    font-family: $body-font;
+  }
+  p {
+    margin: .5em 0 1em .5em;
+  }
+}
+
+#registered {
+  display: block;
+  float: right;
+  font-family: $form-font;
+  font-size: .8em;
+  margin-top: -.85em;
+
+  a {
+    color: $main-color;
+    font-weight: bold;
+    text-transform: uppercase;
   }
 }
 
@@ -251,9 +365,6 @@ nav {
 
     h3 {
       font-size: 1em;
-    }
-    p {
-
     }
   }
 }
@@ -282,6 +393,16 @@ nav {
   }
   &__warn {
     color: $warning-color;
+  }
+}
+
+.loading {
+  display: block;
+  text-align: center;
+
+  h1 i {
+    color: $main-color;
+    font-size: 200px;
   }
 }
 

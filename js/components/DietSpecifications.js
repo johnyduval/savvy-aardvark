@@ -103,14 +103,35 @@ function nutrientsPaleo() {
         'saccharose', 'dextrose', 'dextrin', 'maltodextrin', 'casein'];
 }
 
+// Display List
+function displayPaleo() {
+    return ['Grains and legumes', 'Vegetable seed oils', 'Dairy products',
+        'Any source of concentrated sugar', 'Artificial sweeteners', 'Alcohol']
+}
+
+function displayVegetarian() {
+    return ['Meat', 'Certain Animal By-products']
+}
+
+function displayVegan() {
+    return ['Meat', 'Meat By-Products (gelatin, animal broths',
+        'Animal By-Products (eggs, dairy, honey']
+}
+
 export default {
     restrictionsVegetarian : restrictionsVegetarian,
     restrictionsVegan : restrictionsVegan,
     restrictionsPaleo : restrictionsPaleo,
+
     warningsVegetarian : warningsVegetarian,
     warningsVegan : warningsVegan,
     warningsPaleo : warningsPaleo,
+
     nutrientsVegetarian : nutrientsVegetarian,
     nutrientsVegan : nutrientsVegan,
-    nutrientsPaleo : nutrientsPaleo
+    nutrientsPaleo : nutrientsPaleo,
+
+    Paleo : displayPaleo,
+    Vegetarian : displayVegetarian,
+    Vegan : displayVegan
 };

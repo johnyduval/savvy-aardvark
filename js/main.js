@@ -14,11 +14,13 @@ import SearchUPC from './components/SearchUPC';
 import SearchResult from './components/SearchResult';
 import SignIn from './components/FormSignIn';
 import UserProfile from './components/UserProfile';
+import UserHistory from './components/UserHistory';
 import FormSignUp1 from './components/FormSignUp1';
 import FormSignUp2name from './components/FormSignUp2name';
 import FormSignUp3diet from './components/FormSignUp3diet';
 import FormSignUp4ingr from './components/FormSignUp4ingr';
 import MoreInfo from './components/MoreInfo';
+import SearchHistory from './components/SearchHistory';
 import SearchResultProduct from './components/SearchResultProduct';
 
 import Result from './components/Result';
@@ -48,6 +50,7 @@ var routes = (
 
             <Route onEnter={mustBeLoggedIn}>
                 <Route path="userprofile" component={UserProfile}/>
+                <Route path="userhistory" component={UserHistory}/>
                 <Route path="signup-name" component={FormSignUp2name}/>
                 <Route path="diet" component={FormSignUp3diet}/>
                 <Route path="ingredients" component={FormSignUp4ingr}/>
@@ -59,6 +62,7 @@ var routes = (
 
             </Route>
             <Route path="moreinfo" component={MoreInfo}/>
+            <Route path="recent-searches" component={SearchHistory}/>
             <Route path="*" component={NotFound}/>
 
         </Route>

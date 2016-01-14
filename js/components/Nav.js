@@ -31,8 +31,8 @@ var Nav = React.createClass({
                         , {Parse.User.current().get("firstName")}</p>
                     <ul>
                         <li><Link to="/"             title="Logout"  className="tooltip" onClick={logOutNow}><i className="fa fa-sign-out"></i></Link></li>
+                        <li><Link to="/userhistory"  title="Search History" className="tooltip"><i className="fa fa-history"></i></Link></li>
                         <li><Link to="/userprofile"  title="Profile" className="tooltip"><i className="fa fa-user"></i></Link></li>
-                        <li><Link to=""  title="Search History" className="tooltip"><i className="fa fa-history"></i></Link></li>
                     </ul>
                 </nav>
             )

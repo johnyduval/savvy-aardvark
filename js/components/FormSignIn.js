@@ -42,7 +42,7 @@ var SignIn = React.createClass({
     render: function () {
         return (
             <div className="main">
-                <h1 className="main__title">Log In</h1>
+                <h1 className="main__title">Sign In</h1>
                 <Formsy.Form
                     className="main__panel"
                     onValidSubmit={this.submit}
@@ -74,7 +74,7 @@ var SignIn = React.createClass({
                         disabled={!this.state.canSubmit}>
                         Sign In!
                     </button>
-                    <p id="registered">Don't Have an Account Yet? <Link to="/signup">Sign Up!</Link></p>
+                    <p id="registered">Want an Account? <Link to="/signup">Sign Up!</Link></p>
                 </Formsy.Form>
             </div>
         );

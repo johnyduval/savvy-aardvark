@@ -64,7 +64,7 @@ var FormSignUp3diet = React.createClass({
             error: function (error) {
                 console.log(error.message);
             }
-        }).then(function() {
+        }).then(function () {
             that.props.history.pushState(null, '/ingredients');
         });
     },
@@ -72,58 +72,34 @@ var FormSignUp3diet = React.createClass({
         return (
             <div className="main">
                 <h1>Diet</h1>
-                <h6>Step 3 of 4</h6>
-                <Formsy.Form
-                    onChange={this.onChangeDiet}
-                    className="main__panel"
-                    onValidSubmit={this.submit}
-                    onValid={this.enableButton}
-                    onInvalid={this.disableButton}>
+                <div className="main__panel">
+                    <p className="step">Step 3 of 4</p>
+                    <Formsy.Form
+                        onChange={this.onChangeDiet}
 
-                    <h2>Choose a diet that you wish to watch for.</h2>
-                    <p>If you only wish to watch for specific ingredients, select "none" to move to next page.</p>
-                    <br />
-                    <FormRadio
-                        required
-                        name="diet"
-                        items={["Vegan", "Vegetarian", "Paleo", "None", "Fruitarian"]}
-                    />
-                    { this.state.statusMessage ? <DietResults diet={this.state.chosenDiet}/> : null }
+                        onValidSubmit={this.submit}
+                        onValid={this.enableButton}
+                        onInvalid={this.disableButton}>
 
-                    <button
-                        className="submit-btn"
-                        type="submit"
-                        disabled={!this.state.canSubmit}>
-                        Next
-                    </button>
-                </Formsy.Form>
+                        <h2>Choose a diet</h2>
+                        <p>You'll be able to add to the list in the next step...</p>
+
+                        <FormRadio
+                            required
+                            name="diet"
+                            items={["Vegetarian (Ovo-Lacto)", "Vegan", "Paleo", "None"]}
+                        />
+                        <button
+                            className="submit-btn"
+                            type="submit"
+                            disabled={!this.state.canSubmit}>
+                            Next
+                        </button>
+                    </Formsy.Form>
+                </div>
             </div>
         );
     }
-});
-
-var DietResults = React.createClass({
-    render () {
-        if (this.props.diet === "None") {
-            return (
-                <div className="statusMessage">
-                    <p>Great! You didn't choose a specific diet. On the next page you'll be able to add specific
-                        ingredients that we should watch out for.</p>
-                </div>
-
-            )
-        } else {
-            return (
-                <div className="statusMessage">
-                    <p>Great! Because you chose a {this.props.diet} diet, we'll be looking out for the following
-                        ingredients: {[]}
-                        .</p>
-                    <p>You'll be able to customize this list in the next step...</p>
-                </div>
-            )
-        }
-    }
-
 });
 
 export default FormSignUp3diet;

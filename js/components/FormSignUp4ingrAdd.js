@@ -1,18 +1,11 @@
 import React from 'react';
-import request from 'superagent';
-import {Link} from 'react-router';
-import { createHistory } from 'history';
-
 import Formsy from 'formsy-react';
 import FormInput from './FormInput';
 
-import Parse from 'parse'
-Parse.initialize("xMN2SDWbUpH0Tius0RAscb5Ia65CGOD7U1qKtAxH", "wlqxDznzkziAQB2hNhMFu5VKXvwKskjDonIhlSNn");
-
-var SearchName = React.createClass({
+var FormSignUp4ingrAdd = React.createClass({
     getInitialState() {
         return {
-            canSubmit: false,
+            canSubmit: false
         }
     },
     enableButton: function () {
@@ -25,34 +18,40 @@ var SearchName = React.createClass({
             canSubmit: false
         });
     },
+    onSubmit: function (model) {
+        this.myInput.setValue(null);
+        this.props.addIngredient(model);
+    },
     render: function () {
         return (
             <div className="main">
                 <Formsy.Form
                     id="productSearch"
-                    className="main__panel"
-                    onValidSubmit={this.props.submitName}
+                    //onChange={this.onChangeDiet}
+                    onValidSubmit={this.onSubmit}
                     onValid={this.enableButton}
                     onInvalid={this.disableButton}>
 
                     <div className="field searchBar">
-                        <label>Search by Name</label>
+                        <label>Anything else to add?</label>
                         <FormInput
-                            name="searchName"
-                            title="Search"
-                            required
+                            ref={(ref) => this.myInput = ref}
+                            placeholder="single ingredient"
+                            name="ingredient"
+                            title="ingredient"
                         />
                     </div>
                     <button
-                        className="submit-btn searchSubmit"
+                        className="submit-btn searchSubmit addIngr"
                         type="submit"
                         disabled={!this.state.canSubmit}>
-                        <i className="fa fa-arrow-right"></i>
+                        add
                     </button>
                 </Formsy.Form>
             </div>
         )
     }
+
 });
 
-export default SearchName;
+export default FormSignUp4ingrAdd;

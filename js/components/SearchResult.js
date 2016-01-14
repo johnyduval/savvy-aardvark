@@ -10,7 +10,7 @@ var SearchResult = React.createClass({
     getInitialState() {
         return {
             canSubmit: false,
-            products:[]
+            products: []
         }
     },
     enableButton: function () {
@@ -33,7 +33,7 @@ var SearchResult = React.createClass({
         Parse.Cloud.run('productName', {search: res}).then(function (response) {
             console.log(response)
             that.setState({
-                products:response.productsArray,
+                products: response.productsArray,
 
             })
         }, function (error) {
@@ -47,8 +47,12 @@ var SearchResult = React.createClass({
                 <div className="main__panel">
                     <ul className="results">
                         {
-                            this.state.products.map(function(product){
-                                return <li><Link to={'/search-result/product/' + product.upc}>{product.product_name}></Link></li>
+                            this.state.products.map(function (product) {
+                                return <Link to={'/search-result/product/' + product.upc}>
+                                        <li>
+                                            {product.product_name.toLowerCase()}
+                                        </li>
+                                    </Link>
                             }.bind(this))
                         }
                     </ul>
