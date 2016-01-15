@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Your Food Profile</title>
+        <meta name="description" content="Your Food Profile">
+        <meta name="viewport" content="width=device-width">
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="https://www.parsecdn.com/js/parse-latest.js"></script>
+    </head>
+    <body>
+        <div id="main">
+            <h1>Logging Search History</h1>
+            
+            <form id="search-history">
+                <!--<input type="text" name="search" id="search"/>-->
+                <input type="submit" value="Submit"/>
+            </form>
+        </div>
+        <script>
+        
+        Parse.initialize("xMN2SDWbUpH0Tius0RAscb5Ia65CGOD7U1qKtAxH", "wlqxDznzkziAQB2hNhMFu5VKXvwKskjDonIhlSNn");
+
+        var Search = Parse.Object.extend("Searches");
+        var search = new Search();
+        var user = Parse.User.current();
+        
+        
+        $('#search-history').submit(function(event){
+            event.preventDefault();
+            
+            // var searchQuery = $('#search').val();
+            
+            search.set("productUPC", this.props.params.upc);
+            search.set("productName", response.productsArray[0].product_name);
+            search.set('productDescription', response.productsArray[0].product_description);
+            search.set('ingredients', response.productsArray[0].ingredients);
+            search.set('permission', this.state.ingredientFound);
+            search.set('userId', user);
+        });
+        
+            
+            
+            search.set("productUPC", 'ok');
+            search.set("productName", 'ok');
+            search.set('productDescription', 'ok');
+            search.set('ingredients', 'ok');
+            search.set('permission', 'ok');
+            search.set('userId', user);
+            
+            console.log(search)
+            
+              search.save({
+            success: function(results){
+                console.log("Added!");
+            }, error: function(res, error){
+                console.log(error);
+            }
+            });
+        
+        
+          
+        </script>
+    </body>
+</html>

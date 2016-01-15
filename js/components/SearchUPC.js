@@ -1,14 +1,16 @@
 import React from 'react';
 import request from 'superagent';
-import {Link} from 'react-router';
+import {Link,History} from 'react-router';
 
 import Formsy from 'formsy-react';
 import FormInput from './FormInput';
+import BarcodeScanner from './UPCscan';
 
-import Parse from 'parse'
+import Parse from 'parse';
 Parse.initialize("xMN2SDWbUpH0Tius0RAscb5Ia65CGOD7U1qKtAxH", "wlqxDznzkziAQB2hNhMFu5VKXvwKskjDonIhlSNn");
 
 var SearchUPC = React.createClass({
+    mixins: [ History ],
     getInitialState() {
         return {
             canSubmit: false,
@@ -23,6 +25,9 @@ var SearchUPC = React.createClass({
         this.setState({
             canSubmit: false
         });
+    },
+    gotUpcCode: function(upc) {
+        this.history.pushState(null, '/search-result/product/' + upc);
     },
     render: function () {
         return (
@@ -41,6 +46,7 @@ var SearchUPC = React.createClass({
                             title="Search"
                             required
                         />
+                        <BarcodeScanner onChange={this.gotUpcCode}/>
                     </div>
                     <button
                         className="submit-btn searchSubmit"
