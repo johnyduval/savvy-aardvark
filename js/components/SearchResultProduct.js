@@ -18,6 +18,7 @@ var SearchResultProduct = React.createClass({
             canSubmit: false,
             ingredientFound: false,
             product_name: [],
+            product_upc: [],
             allergens: [],
             food_category: [],
             ingredients: [],
@@ -81,6 +82,7 @@ var SearchResultProduct = React.createClass({
 
             that.setState({
                 product_name: response.productsArray[0].product_name.toLowerCase(),
+                product_upc: searchInputObj,
                 ingredients: response.productsArray[0].ingredients.toLowerCase(),
                 nutrients: NutrientArray,
                 food_category: response.productsArray[0].food_category,
@@ -90,6 +92,7 @@ var SearchResultProduct = React.createClass({
                 var Search = Parse.Object.extend("Searches");
                 var search = new Search()
                 search.set("productName", that.state.product_name.toString());
+                search.set("productUPC", that.state.product_upc.toString());
                 search.set('productDescription', that.state.food_category.toString());
                 search.set('ingredients', that.state.ingredients.toString());
                 search.set('permission', that.state.ingredientFound);
@@ -185,7 +188,7 @@ var SearchResultProduct = React.createClass({
             return (
                 <div id="verdict-wrapper">
                     <div className="verdict">
-                        <h1 className="verdict__warn" title="Yes!">
+                        <h1 className="verdict__warn" title="Warn!">
                             <i className="fa fa-exclamation-circle"></i>
                         </h1>
                     </div>
