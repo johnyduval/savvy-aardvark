@@ -1,0 +1,220 @@
+import React from 'react';
+import request from 'superagent';
+import {Link} from 'react-router';
+
+import Formsy from 'formsy-react';
+import FormInput from './FormInput';
+
+import Parse from 'parse'
+Parse.initialize("xMN2SDWbUpH0Tius0RAscb5Ia65CGOD7U1qKtAxH", "wlqxDznzkziAQB2hNhMFu5VKXvwKskjDonIhlSNn");
+
+var _ = require("underscore");
+
+var SearchResultProduct = React.createClass({
+    getInitialState() {
+        return {
+            isLoading: true,
+            notFound: false,
+            canSubmit: false,
+            ingredientFound: false,
+            product_name: [],
+            product_upc: [],
+            allergens: [],
+            food_category: [],
+            ingredients: [],
+            nutrients: []
+        }
+    },
+    enableButton: function () {
+        this.setState({
+            canSubmit: true
+        });
+    },
+    disableButton: function () {
+        this.setState({
+            canSubmit: false
+        });
+    },
+    componentDidMount: function () {
+
+        var searchInputObj = this.props.params.upc;
+        var that = this;
+
+        Parse.Cloud.run('UPC', {search: searchInputObj}).then(function (response) {
+            that.state.isLoading = false;
+
+            var ProductArray = response.productsArray[0].ingredients.toLowerCase().split(" ");
+            var newProductArray = ProductArray.map(function (string) {
+                return string.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
+            })
+            var ProductArray2 = response.productsArray[0].ingredients.toLowerCase().split(", ")
+            var newProductArray2 = ProductArray2.map(function (string) {
+                return string.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
+            })
+
+            var NutrientArray = response.productsArray[0].nutrients.filter(function (nutrient) {
+                return nutrient.nutrient_value !== ""
+            }).map(function (nutrient) {
+                return nutrient.nutrient_name + ': ' + nutrient.nutrient_value + ' ' + nutrient.nutrient_uom + ', '
+            })
+
+            var NutrientName = response.productsArray[0].nutrients.filter(function (nutrientName) {
+                return nutrientName.nutrient_value !== ""
+            }).map(function (nutrientName) {
+                return nutrientName.nutrient_name
+            })
+
+            var ProductArrayMaster = newProductArray.concat(newProductArray2);
+            var UserIngredientArray = Parse.User.current().get("to_avoid");
+            var UserNutrientArray = Parse.User.current().get("nutrients_to_avoid");
+
+            if (_.intersection(UserIngredientArray, ProductArrayMaster).length === 0) {
+                var state = false; // means you can eat it
+
+                if (_.intersection(UserNutrientArray, NutrientName).length === 0) {
+                    var state = false;
+                } else {
+                    var state = true;
+                }
+            } else {
+                var state = true;
+            }
+
+            that.setState({
+                product_name: response.productsArray[0].product_name.toLowerCase(),
+                product_upc: searchInputObj,
+                ingredients: response.productsArray[0].ingredients.toLowerCase(),
+                nutrients: NutrientArray,
+                food_category: response.productsArray[0].food_category,
+                ingredientFound: state
+            }, function () {
+
+                var Search = Parse.Object.extend("Searches");
+                var search = new Search()
+                search.set("productName", that.state.product_name.toString());
+                search.set("productUPC", that.state.product_upc.toString());
+                search.set('productDescription', that.state.food_category.toString());
+                search.set('ingredients', that.state.ingredients.toString());
+                search.set('permission', that.state.ingredientFound);
+                search.set('userId', Parse.User.current());
+                search.save({
+                    success: function (results) {
+                        console.log("Added!");
+                    }, error: function (res, error) {
+                        console.log(error.message);
+
+                    }
+                });
+            })
+
+            Parse.Cloud.run("productAdditives", {search: searchInputObj}).then(function (output) {
+                that.setState({
+                    allergens: output.allergens.map(function (allergen) {
+                        if (allergen.allergen_value > 0) {
+                            return allergen.allergen_name + ', ';
+                        } else {
+                            console.log("excluded allergens");
+                        }
+                    })
+                })
+            })
+        }, function (error) {
+            console.log(error.message);
+        });
+    },
+    render() {
+        //if (this.state.isLoading) {
+        //    return (
+        //        <div id="verdict-wrapper">
+        //            <div className="loading">
+        //                <h1>
+        //                    <i className="fa fa-spinner fa-pulse"></i>
+        //                </h1>
+        //            </div>
+        //        </div>
+        //    )
+        //}
+        if (this.state.ingredientFound === false) {
+            return (
+                <div id="verdict-wrapper">
+                    <div className="verdict">
+                        <h1 className="verdict__yes" title="Yes!">
+                            <i className="fa fa-check-circle"></i>
+                        </h1>
+                    </div>
+
+                    <div className="main">
+                        <div className="main__panel productResult">
+                            <h2>{this.state.product_name}</h2>
+                            <h3>Ingredients</h3>
+                            <p>{this.state.ingredients}</p>
+                            {console.log(this.state.ingredients)}
+                            <h3>Food Category</h3>
+                            <p>{this.state.food_category}</p>
+                            <h3>Allergens</h3>
+                            <p>{this.state.allergens}</p>
+                            <h3>Nutrients</h3>
+                            <p>{this.state.nutrients}</p>
+                        </div>
+                    </div>
+                </div>
+            )
+        } else if (this.state.ingredientFound === true) {
+            return (
+                <div id="verdict-wrapper">
+                    <div className="verdict">
+                        <h1 className="verdict__no" title="Yes!">
+                            <i className="fa fa-times-circle"></i>
+                        </h1>
+                    </div>
+
+                    <div className="main">
+                        <div className="main__panel productResult">
+                            <h2>{this.state.product_name}</h2>
+                            <h3>Ingredients</h3>
+                            <p>{this.state.ingredients}</p>
+                            {console.log(this.state.ingredients)}
+                            <h3>Food Category</h3>
+                            <p>{this.state.food_category}</p>
+                            <h3>Allergens</h3>
+                            <p>{this.state.allergens}</p>
+                            <h3>Nutrients</h3>
+                            <p>{this.state.nutrients}</p>
+                        </div>
+                    </div>
+                </div>
+            )
+        } else {
+            return (
+                <div id="verdict-wrapper">
+                    <div className="verdict">
+                        <h1 className="verdict__warn" title="Warn!">
+                            <i className="fa fa-exclamation-circle"></i>
+                        </h1>
+                    </div>
+
+                    <div className="main">
+                        <h2>Results</h2>
+                        <div className="main__panel">
+                            <ul className="productResult">
+                                <li>Product: {this.state.product_name}</li>
+                                <br/>
+                                <li>Ingredients: {this.state.ingredients}</li>
+                                <br/>
+                                <li>Food Category: {this.state.food_category}</li>
+                                <br/>
+                                <li>Allergens: {this.state.allergens}</li>
+                                <br/>
+                                <li>nutrients: {this.state.nutrients}</li>
+                                <br/>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+    }
+
+});
+
+export default SearchResultProduct;
